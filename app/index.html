@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Abfallrechner</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="page__header">
+      <h1>Abfallrechner</h1>
+      <p class="subtitle">Schätzt Ihr Abfallaufkommen und die anfallenden Kosten – basierend auf typischen Durchschnittswerten pro Person.</p>
+    </header>
+
+    <section class="card">
+      <h2>Angaben</h2>
+      <div class="field-grid">
+        <label class="field">
+          <span>Anzahl Personen im Haushalt</span>
+          <input type="number" id="persons" min="1" step="1" value="3" />
+        </label>
+        <label class="field">
+          <span>Zeitraum</span>
+          <select id="period">
+            <option value="7">1 Woche</option>
+            <option value="30" selected>1 Monat</option>
+            <option value="365">1 Jahr</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Annahmen (kg pro Person &amp; Tag)</h2>
+      <p class="hint">Durchschnittswerte – bei Bedarf anpassen.</p>
+      <div id="assumptions" class="assumptions"></div>
+    </section>
+
+    <section class="card">
+      <h2>Ergebnis</h2>
+      <div id="result" class="result"></div>
+      <div id="chart" class="chart"></div>
+      <p class="note">Kostenannahme: nur Restmüll wird kostenpflichtig entsorgt (<span id="priceLabel"></span>€/kg), Wertstoffe (Bio, Papier, Verpackungen, Glas) gelten als bereits über die Grundgebühr abgegolten bzw. kostenfrei.</p>
+    </section>
+
+    <footer class="page__footer">
+      <p>Alle Werte sind grobe Beispiel-Annahmen zu Demonstrationszwecken und ersetzen keine reale Abfallbilanz.</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
