@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Abfall-Apps</title>
+<style>
+:root {
+  --bg: #f5f6f4; --card: #fff; --text: #1a1e1b; --muted: #5a6460;
+  --border: #dde2db; --accent: #2d6b4a; --accent-soft: #e5f0ea;
+  --shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111512; --card: #1a1e1b; --text: #e8ede9; --muted: #8a978e;
+    --border: #28302a; --accent: #5ab87a; --accent-soft: #1e3028;
+    --shadow: 0 2px 12px rgba(0,0,0,.3);
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); }
+.page { max-width: 600px; margin: 0 auto; padding: 3rem 1.25rem; }
+h1 { font-size: 1.75rem; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+.sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+.apps { display: flex; flex-direction: column; gap: 1rem; }
+.app-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.25rem 1.25rem 1.25rem 1.5rem; box-shadow: var(--shadow);
+  text-decoration: none; color: inherit; display: block;
+  border-left: 4px solid var(--accent); transition: background .15s;
+}
+.app-card:hover { background: var(--accent-soft); }
+.app-card h2 { font-size: 1.05rem; margin-bottom: 0.3rem; }
+.app-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Abfall-Apps</h1>
+  <p class="sub">Wählen Sie eine Anwendung</p>
+  <div class="apps">
+    <a class="app-card" href="app/abfallerfassung.html">
+      <h2>Abfallerfassung</h2>
+      <p>Erfassung von Produktionsabfall: Sorte, Breite, Schnittlistennummer, Rand, Nebenlauf, Zwischenlagen, Kantenschutz – mit CSV-Export.</p>
+    </a>
+    <a class="app-card" href="app/index.html">
+      <h2>Abfallrechner</h2>
+      <p>Schätzung von Haushaltsabfallmengen und Entsorgungskosten nach Fraktion (Restmüll, Bio, Papier, Verpackungen, Glas).</p>
+    </a>
+  </div>
+</div>
+</body>
+</html>
