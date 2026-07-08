@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Abfallerfassung</title>
+<style>
+:root {
+  --bg: #f5f6f4;
+  --card: #ffffff;
+  --text: #1a1e1b;
+  --muted: #5a6460;
+  --border: #dde2db;
+  --accent: #2d6b4a;
+  --accent-hover: #245a3d;
+  --accent-soft: #e5f0ea;
+  --danger: #c0392b;
+  --danger-soft: #fdecea;
+  --input-bg: #f8f9f7;
+  --row-even: #f9faf8;
+  --shadow: 0 2px 8px rgba(0,0,0,.07);
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111512;
+    --card: #1a1e1b;
+    --text: #e8ede9;
+    --muted: #8a978e;
+    --border: #28302a;
+    --accent: #5ab87a;
+    --accent-hover: #6dca8c;
+    --accent-soft: #1e3028;
+    --danger: #e55c4a;
+    --danger-soft: #3a1a18;
+    --input-bg: #141815;
+    --row-even: #1d211e;
+    --shadow: 0 2px 12px rgba(0,0,0,.3);
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+.page { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+/* Header */
+.page-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.page-header h1 { font-size: 1.5rem; letter-spacing: -0.01em; }
+.page-header .sub { color: var(--muted); font-size: 0.85rem; }
+
+/* Card */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+}
+.card-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.78rem; }
+
+/* Form grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+.field { display: flex; flex-direction: column; gap: 0.3rem; }
+.field label { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+.field input, .field select {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 0.88rem;
+  transition: border-color .15s;
+}
+.field input:focus, .field select:focus { outline: none; border-color: var(--accent); }
+.field input::placeholder { color: var(--muted); opacity: .6; }
+
+/* Actions row */
+.form-actions { display: flex; gap: 0.6rem; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 1rem; border-radius: 7px; border: none;
+  font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: background .15s, color .15s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--border); }
+.btn-danger:hover { background: var(--danger-soft); border-color: var(--danger); }
+.btn-sm { padding: 0.3rem 0.6rem; font-size: 0.78rem; }
+.spacer { flex: 1; }
+
+/* Summary bar */
+.summary-bar {
+  display: flex; gap: 1.5rem; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+.summary-item { display: flex; flex-direction: column; gap: 0.1rem; }
+.summary-item .s-label { font-size: 0.72rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.summary-item .s-value { font-size: 1.05rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Table */
+.table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+thead th {
+  background: var(--card);
+  color: var(--muted); font-weight: 600;
+  text-align: left; padding: 0.6rem 0.75rem;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em;
+  position: sticky; top: 0;
+}
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:nth-child(even) td { background: var(--row-even); }
+tbody tr:hover td { background: var(--accent-soft); }
+tbody td { padding: 0.5rem 0.75rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+tbody td.actions { white-space: nowrap; }
+.empty-state {
+  text-align: center; padding: 2.5rem 1rem;
+  color: var(--muted); font-size: 0.9rem;
+}
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  background: var(--accent); color: #fff;
+  padding: 0.6rem 1.1rem; border-radius: 8px;
+  font-size: 0.85rem; box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .2s, transform .2s;
+  pointer-events: none; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-header">
+    <h1>Abfallerfassung</h1>
+    <span class="sub">Daten werden lokal gespeichert</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Neuen Eintrag erfassen</div>
+    <div class="form-grid">
+      <div class="field">
+        <label for="f-sorte">Sorte</label>
+        <input type="text" id="f-sorte" placeholder="z.B. A, B, Offset …" />
+      </div>
+      <div class="field">
+        <label for="f-breite">Breite (mm)</label>
+        <input type="number" id="f-breite" min="0" step="1" placeholder="z.B. 1020" />
+      </div>
+      <div class="field">
+        <label for="f-schnittliste">Schnittlistennummer</label>
+        <input type="text" id="f-schnittliste" placeholder="z.B. SL-2024-001" />
+      </div>
+      <div class="field">
+        <label for="f-rand-pct">Rand (%)</label>
+        <input type="number" id="f-rand-pct" min="0" step="0.01" placeholder="z.B. 3.5" />
+      </div>
+      <div class="field">
+        <label for="f-rand-m2">Rand (m²)</label>
+        <input type="number" id="f-rand-m2" min="0" step="0.001" placeholder="z.B. 12.40" />
+      </div>
+      <div class="field">
+        <label for="f-nebenlauf">Nebenlauf (m²)</label>
+        <input type="number" id="f-nebenlauf" min="0" step="0.001" placeholder="z.B. 5.00" />
+      </div>
+      <div class="field">
+        <label for="f-zw-m2">Zwischenlagen (m²)</label>
+        <input type="number" id="f-zw-m2" min="0" step="0.001" placeholder="z.B. 2.00" />
+      </div>
+      <div class="field">
+        <label for="f-zw-bogen">Zwischenlagen (Bogen)</label>
+        <input type="number" id="f-zw-bogen" min="0" step="1" placeholder="z.B. 50" />
+      </div>
+      <div class="field">
+        <label for="f-kant-m2">Kantenschutz (m²)</label>
+        <input type="number" id="f-kant-m2" min="0" step="0.001" placeholder="z.B. 1.50" />
+      </div>
+      <div class="field">
+        <label for="f-kant-bogen">Kantenschutz (Bogen)</label>
+        <input type="number" id="f-kant-bogen" min="0" step="1" placeholder="z.B. 20" />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addEntry()">&#43; Erfassen</button>
+      <button class="btn btn-secondary" onclick="resetForm()">Zurücksetzen</button>
+      <div class="spacer"></div>
+      <button class="btn btn-secondary" onclick="exportCSV()">&#8595; CSV Export</button>
+      <button class="btn btn-danger" onclick="clearAll()">Alle löschen</button>
+    </div>
+  </div>
+
+  <div id="summary" class="summary-bar" style="display:none"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Datum</th>
+          <th>Sorte</th>
+          <th>Breite (mm)</th>
+          <th>Schnittliste</th>
+          <th>Rand %</th>
+          <th>Rand m²</th>
+          <th>Nebenlauf m²</th>
+          <th>Zwischenl. m²</th>
+          <th>Zwischenl. Bogen</th>
+          <th>Kantenschutz m²</th>
+          <th>Kantenschutz Bogen</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div id="empty-state" class="empty-state">Noch keine Einträge vorhanden. Erfassen Sie den ersten Eintrag oben.</div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const STORAGE_KEY = 'abfallerfassung_v1';
+let entries = [];
+
+function load() {
+  try { entries = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { entries = []; }
+}
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
+
+function val(id) { return document.getElementById(id).value.trim(); }
+function numVal(id) { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
+
+function addEntry() {
+  const sorte = val('f-sorte');
+  const schnittliste = val('f-schnittliste');
+  if (!sorte && !schnittliste) { showToast('Bitte mindestens Sorte oder Schnittlistennummer angeben.', true); return; }
+
+  const entry = {
+    id: Date.now(),
+    datum: new Date().toLocaleDateString('de-DE'),
+    sorte: sorte,
+    breite: numVal('f-breite'),
+    schnittliste: schnittliste,
+    randPct: numVal('f-rand-pct'),
+    randM2: numVal('f-rand-m2'),
+    nebenlaufM2: numVal('f-nebenlauf'),
+    zwM2: numVal('f-zw-m2'),
+    zwBogen: numVal('f-zw-bogen'),
+    kantM2: numVal('f-kant-m2'),
+    kantBogen: numVal('f-kant-bogen'),
+  };
+
+  entries.unshift(entry);
+  save();
+  render();
+  resetForm();
+  showToast('Eintrag erfasst.');
+}
+
+function deleteEntry(id) {
+  entries = entries.filter(e => e.id !== id);
+  save();
+  render();
+  showToast('Eintrag gelöscht.');
+}
+
+function clearAll() {
+  if (!confirm('Alle Einträge wirklich löschen?')) return;
+  entries = [];
+  save();
+  render();
+  showToast('Alle Einträge gelöscht.');
+}
+
+function resetForm() {
+  ['f-sorte','f-breite','f-schnittliste','f-rand-pct','f-rand-m2','f-nebenlauf','f-zw-m2','f-zw-bogen','f-kant-m2','f-kant-bogen']
+    .forEach(id => { document.getElementById(id).value = ''; });
+}
+
+function fmt(v, dec = 2) { return v == null ? '–' : typeof v === 'number' ? v.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: dec }) : v; }
+
+function render() {
+  const tbody = document.getElementById('table-body');
+  const empty = document.getElementById('empty-state');
+  const summary = document.getElementById('summary');
+
+  if (!entries.length) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    summary.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+
+  // Summary totals
+  const sumRandM2 = entries.reduce((s, e) => s + (e.randM2 || 0), 0);
+  const sumNebenlauf = entries.reduce((s, e) => s + (e.nebenlaufM2 || 0), 0);
+  const sumZwM2 = entries.reduce((s, e) => s + (e.zwM2 || 0), 0);
+  const sumKantM2 = entries.reduce((s, e) => s + (e.kantM2 || 0), 0);
+  const totalAbfall = sumRandM2 + sumNebenlauf + sumZwM2 + sumKantM2;
+
+  summary.style.display = 'flex';
+  summary.innerHTML = `
+    <div class="summary-item"><span class="s-label">Einträge</span><span class="s-value">${entries.length}</span></div>
+    <div class="summary-item"><span class="s-label">Rand gesamt</span><span class="s-value">${fmt(sumRandM2)} m²</span></div>
+    <div class="summary-item"><span class="s-label">Nebenlauf gesamt</span><span class="s-value">${fmt(sumNebenlauf)} m²</span></div>
+    <div class="summary-item"><span class="s-label">Zwischenlagen gesamt</span><span class="s-value">${fmt(sumZwM2)} m²</span></div>
+    <div class="summary-item"><span class="s-label">Kantenschutz gesamt</span><span class="s-value">${fmt(sumKantM2)} m²</span></div>
+    <div class="summary-item"><span class="s-label">Abfall gesamt</span><span class="s-value">${fmt(totalAbfall)} m²</span></div>
+  `;
+
+  tbody.innerHTML = entries.map((e, i) => `
+    <tr>
+      <td>${entries.length - i}</td>
+      <td>${e.datum}</td>
+      <td>${e.sorte || '–'}</td>
+      <td>${fmt(e.breite, 0)}</td>
+      <td>${e.schnittliste || '–'}</td>
+      <td>${fmt(e.randPct)} %</td>
+      <td>${fmt(e.randM2)}</td>
+      <td>${fmt(e.nebenlaufM2)}</td>
+      <td>${fmt(e.zwM2)}</td>
+      <td>${fmt(e.zwBogen, 0)}</td>
+      <td>${fmt(e.kantM2)}</td>
+      <td>${fmt(e.kantBogen, 0)}</td>
+      <td class="actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry(${e.id})">&#10005;</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function exportCSV() {
+  if (!entries.length) { showToast('Keine Daten zum Exportieren.', true); return; }
+  const headers = ['Nr','Datum','Sorte','Breite (mm)','Schnittlistennummer','Rand (%)','Rand (m²)','Nebenlauf (m²)','Zwischenlagen (m²)','Zwischenlagen (Bogen)','Kantenschutz (m²)','Kantenschutz (Bogen)'];
+  const rows = entries.map((e, i) => [
+    entries.length - i, e.datum, e.sorte, e.breite, e.schnittliste,
+    e.randPct, e.randM2, e.nebenlaufM2, e.zwM2, e.zwBogen, e.kantM2, e.kantBogen
+  ].map(v => v == null ? '' : String(v).replace(/"/g, '""')).map(v => `"${v}"`).join(';'));
+
+  const csv = '﻿' + [headers.join(';'), ...rows].join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `abfallerfassung_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  showToast('CSV exportiert.');
+}
+
+let toastTimer;
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = isError ? 'var(--danger)' : 'var(--accent)';
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Enter key submits form
+document.querySelectorAll('.form-grid input, .form-grid select').forEach(el => {
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') addEntry(); });
+});
+
+load();
+render();
+</script>
+</body>
+</html>
